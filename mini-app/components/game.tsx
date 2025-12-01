@@ -188,18 +188,24 @@ export default function Game({ onGameOver }: { onGameOver?: () => void }) {
         Average Score: {gamesPlayed > 0 ? (totalScore / gamesPlayed).toFixed(2) : "0.00"}
       </p>
 
-      <Dialog open={showDialog} onOpenChange={setShowDialog}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Game Over</DialogTitle>
-            <DialogDescription>Would you like to play again or quit?</DialogDescription>
-          </DialogHeader>
-          <DialogFooter className="flex gap-4">
-            <Button onClick={() => { resetGame(); setShowDialog(false); }}>Play Again</Button>
-            <Button variant="outline" onClick={() => { onGameOver?.(); setShowDialog(false); }}>Quit</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      {gameOver ? (
+        <GameOverScreen
+          finalScore={score}
+          highScore={highScore}
+          averageScore={gamesPlayed > 0 ? (totalScore / gamesPlayed) : 0}
+          onRestart={resetGame}
+        />
+      ) : (
+        <div>
+          <canvas ref={canvasRef} className="border-2 border-black" />
+          <div className="flex flex-col items-center mt-4">
+            <p className="text-2xl mb-2">Score: {score}</p>
+            <p className="text-xl mb-2">High Score: {highScore}</p>
+            <p className="text-lg mb-6">Average Score: {gamesPlayed > 0 ? (totalScore / gamesPlayed).toFixed(2) : 0}</p>
+            <Button onClick={resetGame}>Restart</Button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
