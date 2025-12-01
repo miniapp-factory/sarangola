@@ -94,3 +94,9 @@
 
 # 2025-12-01 07:41:41.520062
 +if it falls to the ground or hits a tree the game promts "play again" or "quit".  make the game continuous if it passes a tree
+
+# 2025-12-01 07:53:05.505478
++add point system, Highest score and average score, the game doesn't start unless the screen is tapped and the generation of the trees should be continuous
+
+# 2025-12-01 07:53:05.505903
++add point system, Highest score and average score, the game doesn't start unless the screen is tapped and the generation of the trees should be continuous
