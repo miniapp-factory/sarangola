@@ -16,6 +16,10 @@ export default function Game({ onGameOver }: { onGameOver?: () => void }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [score, setScore] = useState(0);
   const [gameOver, setGameOver] = useState(false);
+  const [highScore, setHighScore] = useState(0);
+  const [totalScore, setTotalScore] = useState(0);
+  const [gamesPlayed, setGamesPlayed] = useState(0);
+  const [started, setStarted] = useState(false);
   const [showDialog, setShowDialog] = useState(false);
 
   const kite = {
@@ -146,12 +150,12 @@ export default function Game({ onGameOver }: { onGameOver?: () => void }) {
     };
 
     window.addEventListener("keydown", handleKeyDown);
-    canvas.addEventListener("click", handleClick);
+    canvas.addEventListener("click", handleCanvasClick);
 
     return () => {
       cancelAnimationFrame(animationFrameId);
       window.removeEventListener("keydown", handleKeyDown);
-      canvas.removeEventListener("click", handleClick);
+      canvas.removeEventListener("click", handleCanvasClick);
     };
   }, [obstacles, gameOver, score]);
 
@@ -168,6 +172,10 @@ export default function Game({ onGameOver }: { onGameOver?: () => void }) {
     <div className="flex flex-col items-center justify-center">
       <canvas ref={canvasRef} width={CANVAS_WIDTH} height={CANVAS_HEIGHT} className="border-2 border-black" />
       <p className="mt-4 text-xl">Score: {score}</p>
+      <p className="mt-2 text-lg">High Score: {highScore}</p>
+      <p className="mt-1 text-sm">
+        Average Score: {gamesPlayed > 0 ? (totalScore / gamesPlayed).toFixed(2) : "0.00"}
+      </p>
 
       <Dialog open={showDialog} onOpenChange={setShowDialog}>
         <DialogContent>
