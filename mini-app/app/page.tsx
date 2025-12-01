@@ -4,7 +4,6 @@ import Game from "@/components/game";
 import LandingPage from "@/components/landing-page";
 import { useState } from "react";
 
-export { generateMetadata };
 
 export default function Home() {
   const [started, setStarted] = useState(false);
