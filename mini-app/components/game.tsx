@@ -1,0 +1,161 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
+
+const GRAVITY = 0.6;
+const FLAP_STRENGTH = -10;
+const OBSTACLE_GAP = 150;
+const OBSTACLE_WIDTH = 60;
+const OBSTACLE_INTERVAL = 2000; // ms
+const CANVAS_WIDTH = 400;
+const CANVAS_HEIGHT = 600;
+
+export default function Game() {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [score, setScore] = useState(0);
+  const [gameOver, setGameOver] = useState(false);
+
+  const kite = {
+    x: 80,
+    y: CANVAS_HEIGHT / 2,
+    width: 40,
+    height: 40,
+    vy: 0,
+  };
+
+  const obstacles: { x: number; height: number }[] = [];
+
+  const spawnObstacle = () => {
+    const height = Math.random() * (CANVAS_HEIGHT - OBSTACLE_GAP - 100) + 50;
+    obstacles.push({ x: CANVAS_WIDTH, height });
+  };
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    let animationFrameId: number;
+    let lastTime = performance.now();
+    let obstacleTimer = 0;
+
+    const gameLoop = (time: number) => {
+      const delta = time - lastTime;
+      lastTime = time;
+      obstacleTimer += delta;
+
+      // Update kite
+      kite.vy += GRAVITY;
+      kite.y += kite.vy;
+
+      // Spawn obstacles
+      if (obstacleTimer > OBSTACLE_INTERVAL) {
+        spawnObstacle();
+        obstacleTimer = 0;
+      }
+
+      // Update obstacles
+      obstacles.forEach((obs) => (obs.x -= 3));
+      if (obstacles.length && obstacles[0].x < -OBSTACLE_WIDTH) {
+        obstacles.shift();
+        setScore((s) => s + 1);
+      }
+
+      // Collision detection
+      obstacles.forEach((obs) => {
+        const topRect = {
+          x: obs.x,
+          y: 0,
+          width: OBSTACLE_WIDTH,
+          height: obs.height,
+        };
+        const bottomRect = {
+          x: obs.x,
+          y: obs.height + OBSTACLE_GAP,
+          width: OBSTACLE_WIDTH,
+          height: CANVAS_HEIGHT - (obs.height + OBSTACLE_GAP),
+        };
+        if (rectIntersect(kite, topRect) || rectIntersect(kite, bottomRect)) {
+          setGameOver(true);
+        }
+      });
+
+      // Ground collision
+      if (kite.y + kite.height > CANVAS_HEIGHT || kite.y < 0) {
+        setGameOver(true);
+      }
+
+      // Draw
+      ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+      // Background
+      ctx.fillStyle = "#87CEEB";
+      ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+
+      // Draw obstacles
+      ctx.fillStyle = "#8B4513";
+      obstacles.forEach((obs) => {
+        ctx.fillRect(obs.x, 0, OBSTACLE_WIDTH, obs.height);
+        ctx.fillRect(obs.x, obs.height + OBSTACLE_GAP, OBSTACLE_WIDTH, CANVAS_HEIGHT - (obs.height + OBSTACLE_GAP));
+      });
+
+      // Draw kite
+      ctx.fillStyle = "#FF4500";
+      ctx.fillRect(kite.x, kite.y, kite.width, kite.height);
+
+      // Draw score
+      ctx.fillStyle = "#000";
+      ctx.font = "20px Arial";
+      ctx.fillText(`Score: ${score}`, 10, 30);
+
+      if (!gameOver) {
+        animationFrameId = requestAnimationFrame(gameLoop);
+      } else {
+        ctx.fillStyle = "rgba(0,0,0,0.5)";
+        ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+        ctx.fillStyle = "#FFF";
+        ctx.font = "30px Arial";
+        ctx.fillText("Game Over", CANVAS_WIDTH / 2 - 80, CANVAS_HEIGHT / 2);
+        ctx.font = "20px Arial";
+        ctx.fillText(`Final Score: ${score}`, CANVAS_WIDTH / 2 - 70, CANVAS_HEIGHT / 2 + 30);
+      }
+    };
+
+    animationFrameId = requestAnimationFrame(gameLoop);
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.code === "Space" || e.key === " ") {
+        kite.vy = FLAP_STRENGTH;
+      }
+    };
+
+    const handleClick = () => {
+      kite.vy = FLAP_STRENGTH;
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    canvas.addEventListener("click", handleClick);
+
+    return () => {
+      cancelAnimationFrame(animationFrameId);
+      window.removeEventListener("keydown", handleKeyDown);
+      canvas.removeEventListener("click", handleClick);
+    };
+  }, [obstacles, gameOver, score]);
+
+  const rectIntersect = (a: { x: number; y: number; width: number; height: number }, b: { x: number; y: number; width: number; height: number }) => {
+    return (
+      a.x < b.x + b.width &&
+      a.x + a.width > b.x &&
+      a.y < b.y + b.height &&
+      a.y + a.height > b.y
+    );
+  };
+
+  return (
+    <div className="flex flex-col items-center justify-center">
+      <canvas ref={canvasRef} width={CANVAS_WIDTH} height={CANVAS_HEIGHT} className="border-2 border-black" />
+      <p className="mt-4 text-xl">Score: {score}</p>
+    </div>
+  );
+}

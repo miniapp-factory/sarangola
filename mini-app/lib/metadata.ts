@@ -1,3 +1,3 @@
-export const title = "Mini App Factory App";
-export const description = "This app was created by the Mini App Factory!";
+export const title = "Sarangola Flappy: Filipino Kite Game";
+export const description = "Fly a sarangola through coconut trees in this colorful Filipino-themed Flappy Bird clone!";
 export const url = process.env.NEXT_PUBLIC_URL;
