@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
+import GameOverScreen from "@/components/game-over-screen";
 import { Button } from "@/components/ui/button";
 
 const GRAVITY = 0.3;
@@ -20,7 +20,7 @@ export default function Game({ onGameOver }: { onGameOver?: () => void }) {
   const [totalScore, setTotalScore] = useState(0);
   const [gamesPlayed, setGamesPlayed] = useState(0);
   const [started, setStarted] = useState(false);
-  const [showDialog, setShowDialog] = useState(false);
+  // Dialog state removed; game over handled by gameOver state
 
   const kite = {
     x: 80,
@@ -95,7 +95,7 @@ export default function Game({ onGameOver }: { onGameOver?: () => void }) {
           height: CANVAS_HEIGHT - (obs.height + OBSTACLE_GAP),
         };
         if (rectIntersect(kite, topRect) || rectIntersect(kite, bottomRect)) {
-          setShowDialog(true);
+          setGameOver(true);
           setStarted(false);
           setHighScore((prev) => Math.max(prev, score));
           setTotalScore((prev) => prev + score);
@@ -105,7 +105,7 @@ export default function Game({ onGameOver }: { onGameOver?: () => void }) {
 
       // Ground collision
       if (kite.y + kite.height > CANVAS_HEIGHT || kite.y < 0) {
-        setShowDialog(true);
+        setGameOver(true);
         setStarted(false);
         setHighScore((prev) => Math.max(prev, score));
         setTotalScore((prev) => prev + score);
