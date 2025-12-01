@@ -14,3 +14,31 @@
 +```
 +
 +Generate an app logo and update the app metadata title and description.
+
+# 2025-12-01 06:50:32.737028
++Create a simple 2D side-scrolling mini-game inspired by *Flappy Bird*, but redesigned with a strong **Filipino cultural theme**. The player controls a **sarangola**, a traditional Philippine kite decorated with bright local patterns and a fluttering tail that moves naturally while flying. Tapping, clicking, or pressing a key makes the sarangola rise; releasing lets gravity pull it downward.
++
++Replace Flappy Bird’s pipes with **pairs of coconut trees (niyog)** that have randomized heights and gaps. The player must guide the kite through these gaps without hitting the trees or the ground. The game should include a **scoring system** where the score increases by **+1 for every obstacle pair passed**.
++
++The background should depict a cheerful rural Philippine setting: bright blue sky, soft clouds, rice fields, nipa huts, coconut trees, and distant mountains. Use a colorful, cartoon-like art style with smooth animations for the kite and its tail.
++
++Include a **landing page** before the game starts, containing two large friendly buttons: **“Play”** and **“New Game”**.
++
++* **Play** starts the game immediately.
++* **New Game** resets the score and restarts the game.
++
++Audio should include light breezy music, gentle wind “flap” sounds when the kite rises, and soft chime effects when scoring. Gameplay should feel responsive, simple, fast-paced, and addictive — similar to the original Flappy Bird, but with a distinctly Filipino cultural vibe.
+
+# 2025-12-01 06:50:32.738262
++Create a simple 2D side-scrolling mini-game inspired by *Flappy Bird*, but redesigned with a strong **Filipino cultural theme**. The player controls a **sarangola**, a traditional Philippine kite decorated with bright local patterns and a fluttering tail that moves naturally while flying. Tapping, clicking, or pressing a key makes the sarangola rise; releasing lets gravity pull it downward.
++
++Replace Flappy Bird’s pipes with **pairs of coconut trees (niyog)** that have randomized heights and gaps. The player must guide the kite through these gaps without hitting the trees or the ground. The game should include a **scoring system** where the score increases by **+1 for every obstacle pair passed**.
++
++The background should depict a cheerful rural Philippine setting: bright blue sky, soft clouds, rice fields, nipa huts, coconut trees, and distant mountains. Use a colorful, cartoon-like art style with smooth animations for the kite and its tail.
++
++Include a **landing page** before the game starts, containing two large friendly buttons: **“Play”** and **“New Game”**.
++
++* **Play** starts the game immediately.
++* **New Game** resets the score and restarts the game.
++
++Audio should include light breezy music, gentle wind “flap” sounds when the kite rises, and soft chime effects when scoring. Gameplay should feel responsive, simple, fast-paced, and addictive — similar to the original Flappy Bird, but with a distinctly Filipino cultural vibe.
