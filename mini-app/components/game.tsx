@@ -10,7 +10,7 @@ const OBSTACLE_INTERVAL = 2000; // ms
 const CANVAS_WIDTH = 400;
 const CANVAS_HEIGHT = 600;
 
-export default function Game() {
+export default function Game({ onGameOver }: { onGameOver?: () => void }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [score, setScore] = useState(0);
   const [gameOver, setGameOver] = useState(false);
@@ -78,12 +78,14 @@ export default function Game() {
         };
         if (rectIntersect(kite, topRect) || rectIntersect(kite, bottomRect)) {
           setGameOver(true);
+          onGameOver?.();
         }
       });
 
       // Ground collision
       if (kite.y + kite.height > CANVAS_HEIGHT || kite.y < 0) {
         setGameOver(true);
+        onGameOver?.();
       }
 
       // Draw
