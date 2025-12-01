@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 
-const GRAVITY = 0.6;
+const GRAVITY = 0.3;
 const FLAP_STRENGTH = -10;
 const OBSTACLE_GAP = 150;
 const OBSTACLE_WIDTH = 60;
@@ -21,6 +21,15 @@ export default function Game({ onGameOver }: { onGameOver?: () => void }) {
     width: 40,
     height: 40,
     vy: 0,
+  };
+
+  const resetGame = () => {
+    kite.x = 80;
+    kite.y = CANVAS_HEIGHT / 2;
+    kite.vy = 0;
+    obstacles.length = 0;
+    setScore(0);
+    setGameOver(false);
   };
 
   const obstacles: { x: number; height: number }[] = [];
@@ -77,15 +86,13 @@ export default function Game({ onGameOver }: { onGameOver?: () => void }) {
           height: CANVAS_HEIGHT - (obs.height + OBSTACLE_GAP),
         };
         if (rectIntersect(kite, topRect) || rectIntersect(kite, bottomRect)) {
-          setGameOver(true);
-          onGameOver?.();
+          resetGame();
         }
       });
 
       // Ground collision
       if (kite.y + kite.height > CANVAS_HEIGHT || kite.y < 0) {
-        setGameOver(true);
-        onGameOver?.();
+        resetGame();
       }
 
       // Draw
