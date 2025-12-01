@@ -37,6 +37,7 @@ export default function Game({ onGameOver }: { onGameOver?: () => void }) {
     obstacles.length = 0;
     setScore(0);
     setGameOver(false);
+    setStarted(false);
   };
 
   const obstacles: { x: number; height: number }[] = [];
@@ -60,6 +61,7 @@ export default function Game({ onGameOver }: { onGameOver?: () => void }) {
       const delta = time - lastTime;
       lastTime = time;
       obstacleTimer += delta;
+      if (!started) return;
 
       // Update kite
       kite.vy += GRAVITY;
@@ -94,12 +96,20 @@ export default function Game({ onGameOver }: { onGameOver?: () => void }) {
         };
         if (rectIntersect(kite, topRect) || rectIntersect(kite, bottomRect)) {
           setShowDialog(true);
+          setStarted(false);
+          setHighScore((prev) => Math.max(prev, score));
+          setTotalScore((prev) => prev + score);
+          setGamesPlayed((prev) => prev + 1);
         }
       });
 
       // Ground collision
       if (kite.y + kite.height > CANVAS_HEIGHT || kite.y < 0) {
         setShowDialog(true);
+        setStarted(false);
+        setHighScore((prev) => Math.max(prev, score));
+        setTotalScore((prev) => prev + score);
+        setGamesPlayed((prev) => prev + 1);
       }
 
       // Draw
@@ -145,7 +155,8 @@ export default function Game({ onGameOver }: { onGameOver?: () => void }) {
       }
     };
 
-    const handleClick = () => {
+    const handleCanvasClick = () => {
+      if (!started) setStarted(true);
       kite.vy = FLAP_STRENGTH;
     };
 
