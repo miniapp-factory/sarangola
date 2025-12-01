@@ -1,3 +1,4 @@
+"use client";
 import { generateMetadata } from "@/lib/farcaster-embed";
 import Game from "@/components/game";
 import LandingPage from "@/components/landing-page";
