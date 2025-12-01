@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 
 const GRAVITY = 0.3;
 const FLAP_STRENGTH = -10;
@@ -14,6 +16,7 @@ export default function Game({ onGameOver }: { onGameOver?: () => void }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [score, setScore] = useState(0);
   const [gameOver, setGameOver] = useState(false);
+  const [showDialog, setShowDialog] = useState(false);
 
   const kite = {
     x: 80,
@@ -86,13 +89,13 @@ export default function Game({ onGameOver }: { onGameOver?: () => void }) {
           height: CANVAS_HEIGHT - (obs.height + OBSTACLE_GAP),
         };
         if (rectIntersect(kite, topRect) || rectIntersect(kite, bottomRect)) {
-          resetGame();
+          setShowDialog(true);
         }
       });
 
       // Ground collision
       if (kite.y + kite.height > CANVAS_HEIGHT || kite.y < 0) {
-        resetGame();
+        setShowDialog(true);
       }
 
       // Draw
@@ -165,6 +168,19 @@ export default function Game({ onGameOver }: { onGameOver?: () => void }) {
     <div className="flex flex-col items-center justify-center">
       <canvas ref={canvasRef} width={CANVAS_WIDTH} height={CANVAS_HEIGHT} className="border-2 border-black" />
       <p className="mt-4 text-xl">Score: {score}</p>
+
+      <Dialog open={showDialog} onOpenChange={setShowDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Game Over</DialogTitle>
+            <DialogDescription>Would you like to play again or quit?</DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="flex gap-4">
+            <Button onClick={() => { resetGame(); setShowDialog(false); }}>Play Again</Button>
+            <Button variant="outline" onClick={() => { onGameOver?.(); setShowDialog(false); }}>Quit</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
